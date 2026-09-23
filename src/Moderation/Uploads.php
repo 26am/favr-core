@@ -47,7 +47,10 @@ final class Uploads {
 
 		// The bytes must really be a decodable image, not just carry an image signature.
 		$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( (string) $file['tmp_name'] ) : false;
-		if ( ! is_array( $size ) || empty( $size[0] ) || empty( $size[1] ) ) {
+		$editor = wp_get_image_editor( (string) $file['tmp_name'] );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local temp file.
+		$bytes = (string) file_get_contents( (string) $file['tmp_name'] );
+		if ( ! is_array( $size ) || empty( $size[0] ) || empty( $size[1] ) || is_wp_error( $editor ) || preg_match( '/<\?(php|=)/i', $bytes ) ) {
 			return new \WP_Error( 'favr_upload_type', __( 'Please upload a JPG, PNG, WebP or GIF image.', 'favr-core' ), array( 'status' => 415 ) );
 		}
 
