@@ -46,7 +46,7 @@ final class Uploads {
 		}
 
 		// The bytes must really be a decodable image, not just carry an image signature.
-		$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( (string) $file['tmp_name'] ) : false;
+		$size   = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( (string) $file['tmp_name'] ) : false;
 		$editor = wp_get_image_editor( (string) $file['tmp_name'] );
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local temp file.
 		$bytes = (string) file_get_contents( (string) $file['tmp_name'] );
